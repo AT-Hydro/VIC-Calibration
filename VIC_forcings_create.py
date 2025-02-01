@@ -27,11 +27,11 @@ forcing = pd.read_csv(f"Extract_forcings/{gauge}.csv")
 forcing["VP"] = calculate_vapor_pressure(forcing.P, forcing.SPFH)
 VICforcing = pd.DataFrame()
 VICforcing["PREC"]    = forcing["prc"]
-VICforcing["AIR_TEMP"]= forcing["temp"]
+VICforcing["AIR_TEMP"]= forcing["temp"] + -273.15
 VICforcing["SWDOWN"]  = forcing["SWRF"]
 VICforcing["LWDOWN"]  = forcing["LWRF"]
 VICforcing["AirD"]    = 1.0
-VICforcing["PRESSURE"]= forcing["P"]
-VICforcing["VP"]      = forcing["VP"]
+VICforcing["PRESSURE"]= forcing["P"] / 1000
+VICforcing["VP"]      = forcing["VP"] / 1000
 VICforcing["WIND"]    = np.sqrt(forcing["Uwind"] **2 + forcing["Vwind"] ** 2)
 VICforcing.to_csv(f'./VIC_Forcings/{gauge}.txt', sep='\t', index=False, header=False)
