@@ -17,11 +17,12 @@ def glob_parm_set (gaugepath, start_date,
                    end_date = None, state_date = None,
                  forcingyear = 1979, forcingmonth = 1, forcingday = 2, read_state = False):
     if end_date is None:
-        end_date = start_date + timedelta(days=1)
+        end_date = start_date
         
     endyear, endmonth, endday = str(end_date.year), str(end_date.month).zfill(2), str(end_date.day).zfill(2)
     if state_date is None:
-        stateyear, statemonth, stateday = str(end_date.year), str(end_date.month), str(end_date.day)
+        state_date = start_date  + timedelta(days=1)
+        stateyear, statemonth, stateday = str(state_date.year), str(state_date.month), str(state_date.day)
     else:
         stateyear, statemonth, stateday = str(state_date.year), str(state_date.month), str(state_date.day)
     startyear, startmonth, startday = str(start_date.year), str(start_date.month).zfill(2), str(start_date.day).zfill(2)
@@ -72,7 +73,6 @@ def glob_parm_set (gaugepath, start_date,
             file.write(line)
     return 1
 
-
 def model_evolve(gaugepath, startyear = 1979, startmonth = 1, startday = 2):
     VIC="/mh1/Atakallou/VIC/VIC/vic/drivers/classic/vic_classic.exe"
     glob_parm_path  =  os.path.join(gaugepath, "parameters",  f"gp_{str(startyear)}{str(startmonth).zfill(2)}{str(startday).zfill(2)}.basin.txt")
@@ -104,7 +104,8 @@ def model_rout (res_path, parms, initialPath = None , stopdate = None):
     if stopdate:
         rout_state_path =  os.path.join(parent_dir, f"Rout_{stopdate.year}{str(stopdate.month).zfill(2)}{str(stopdate.day).zfill(2)}.npy")
         np.save(rout_state_path, rout_states)
-    # we will add this option (saving the routing states)if it necessitates in future
+        
+    # we will add this option (saving the routing states)if necessary in future
     # else:
     #     rout_state_path =  os.path.join(parent_dir,
     #                                     f"{sim['YEAR'].iat[-1]}{str(sim['MONTH'].iat[-1]).zfill(2)}{str(sim['DAY'].iat[-1]).zfill(2)}.npy")
